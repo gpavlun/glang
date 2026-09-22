@@ -1,0 +1,107 @@
+{
+  "name": "glang-parser",
+  "displayName": "G Language Support",
+  "description": "Language support for G",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.126.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": ["onLanguage:g"],
+  "main": "./out/src/extension.js",
+  "contributes": {
+      "languages": [
+          {
+              "id": "g",
+              "aliases": [
+                  "G",
+                  "g"
+              ],
+              "extensions": [
+                  ".g"
+              ],
+              "configuration": "./language-configuration.json"
+          }
+      ],
+
+      "semanticTokenTypes": [
+          {
+              "id": "primitive",
+              "description": "G primitive type"
+          },
+          {
+              "id": "modifier",
+              "description": "G declaration modifier"
+          }
+      ],
+
+      "semanticTokenScopes": [
+          {
+              "language": "g",
+              "scopes": {
+                  "control":[
+                    "keyword.control"
+                  ],
+                  "primitive": [
+                      "storage.modifier"
+                  ],
+                  "modifier": [
+                      "storage.modifier"
+                  ],
+                  "type": [
+                      "entity.name.type"
+                  ],
+                  "keyword": [
+                      "keyword"
+                  ],
+                  "function": [
+                      "entity.name.function"
+                  ],
+                  "parameter": [
+                      "variable.parameter"
+                  ],
+                  "variable": [
+                      "variable"
+                  ],
+                  "number": [
+                      "constant.numeric"
+                  ],
+                  "comment": [
+                      "comment.line"
+                  ]
+              }
+          }
+      ]
+  },
+  "scripts": {
+    "generate:lexer": "antlr4ts -visitor -listener -o generated grammar/Glang_lexer.g4",
+    "generate:parser": "antlr4ts -visitor -listener -lib generated/grammar -o generated grammar/Glang_parser.g4",
+    "generate": "npm run generate:lexer && npm run generate:parser",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "24.x",
+    "@types/vscode": "^1.138.0",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.0.0",
+    "antlr4ts-cli": "^0.5.0-alpha.4",
+    "eslint": "^10.5.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.1"
+  },
+  "overrides": {
+    "diff": "^8.0.4",
+    "serialize-javascript": "^7.0.4"
+  },
+  "dependencies": {
+    "antlr4ts": "^0.5.0-alpha.4"
+  }
+}
